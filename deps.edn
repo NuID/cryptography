@@ -1,0 +1,9 @@
+{:deps
+ {nuid/bn {:sha "d4c12ac791a1e1c30a0d946000a7dbec3023f17f"
+           :git/url "git@github.com:NuID/bn.git"}
+  org.clojure/clojurescript {:mvn/version "1.10.439"}
+  org.clojure/clojure {:mvn/version "1.10.0-RC2"}}
+ :aliases
+ {:cambada
+  {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.0"}}}}
+ :paths ["src"]}
