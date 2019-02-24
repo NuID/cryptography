@@ -28,24 +28,24 @@
 
 (defn randlt [n lt]
   (let [ret (secure-random-bn n)]
-    (if (bn/lte ret lt) ret (recur n lt))))
+    (if (bn/lte? ret lt) ret (recur n lt))))
 
 (defn sha256 [a]
-  #?(:cljs (-> (h/sha256) (.update a) .digest)))
+  #?(:clj (let [md (MessageDigest/getInstance "SHA-256")]
+            (->> a .getBytes (.digest md)))
+     :cljs (-> (h/sha256) (.update a) .digest)))
 
 (defn sha512 [a]
-  #?(:clj
-     (let [md (MessageDigest/getInstance "SHA-512")]
-       (->> a .getBytes (.digest md)))
-     :cljs
-     (-> (h/sha512) (.update a) .digest)))
+  #?(:clj (let [md (MessageDigest/getInstance "SHA-512")]
+            (->> a .getBytes (.digest md)))
+     :cljs (-> (h/sha512) (.update a) .digest)))
 
 (defn generate-salt [n]
   #?(:cljs (.toString (b/Buffer.from (secure-random-bytes n)) "base64")))
 
 (defn generate-scrypt-parameters
   [{:keys [salt n r p key-length normalization-form]}]
-  {:fn :scrypt
+  {:id :scrypt
    :salt (or salt (generate-salt 32))
    :normalization-form (or normalization-form "NFKC")
    :key-length (or key-length 32)
@@ -62,7 +62,7 @@
                 a)]
        (scryptjs a' salt n r p key-length))))
 
-(defmulti generate-hashfn :fn)
+(defmulti generate-hashfn :id)
 (defmethod generate-hashfn :scrypt
   [opts]
   (let [params (generate-scrypt-parameters opts)]
@@ -72,13 +72,17 @@
   [opts]
   (fn [a] (assoc opts :result (sha512 a))))
 
+(defmethod generate-hashfn :sha256
+  [opts]
+  (fn [a] (assoc opts :result (sha256 a))))
+
 #?(:cljs (def exports
            #js {:generate-scrypt-parameters generate-scrypt-parameters
                 :secure-random-bytes secure-random-bytes
                 :secure-random-bn secure-random-bn
                 :generate-hashfn generate-hashfn
                 :generate-salt generate-salt
-                :sha256 sha256
-                :sha512 sha512
                 :scrypt scrypt
+                :sha512 sha512
+                :sha256 sha256
                 :randlt randlt}))

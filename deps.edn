@@ -1,8 +1,8 @@
 {:deps
- {nuid/bn {:sha "d4c12ac791a1e1c30a0d946000a7dbec3023f17f"
+ {nuid/bn {:sha "c87a3275a91e51cea3bae2f4f0c940f14c9f1be5"
            :git/url "git@github.com:NuID/bn.git"}
-  org.clojure/clojurescript {:mvn/version "1.10.439"}
-  org.clojure/clojure {:mvn/version "1.10.0-RC2"}}
+  org.clojure/clojurescript {:mvn/version "1.10.520"}
+  org.clojure/clojure {:mvn/version "1.10.0"}}
  :aliases
  {:cambada
   {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.0"}}}}
