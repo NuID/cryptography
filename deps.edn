@@ -1,5 +1,5 @@
 {:deps
- {nuid/bn {:sha "c87a3275a91e51cea3bae2f4f0c940f14c9f1be5"
+ {nuid/bn {:sha "96edf024f2dda3a6afb05071c9349d744d4d8c11"
            :git/url "git@github.com:NuID/bn.git"}
   org.clojure/clojurescript {:mvn/version "1.10.520"}
   org.clojure/clojure {:mvn/version "1.10.0"}}
