@@ -1,7 +1,7 @@
 {:deps
  {nuid/bn
   {:git/url "git@github.com:nuid/bn",
-   :sha "bdc048c25a0c9ec933f3da01961107612251485e"},
+   :sha "371d7e06c451c73f895042bda498e5bbe55ac91a"},
   org.clojure/clojurescript {:mvn/version "1.10.520"},
   org.clojure/clojure {:mvn/version "1.10.0"}},
  :aliases
@@ -9,5 +9,5 @@
   {:extra-deps
    {nuid/repl
     {:git/url "git@github.com:nuid/repl",
-     :sha "4e6d77e2419b38b1e913b1cba65b23fe3c123b52"}}}},
+     :sha "0e0785539a9997e4c7ff9f2845c631bea0575fa0"}}}},
  :paths ["src"]}
