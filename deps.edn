@@ -1,10 +1,13 @@
 {:deps
  {nuid/bn
   {:git/url "git@github.com:nuid/bn",
-   :sha "e2d999f9108e68c1f518c21d4ad129b39e477ca6"},
+   :sha "bdc048c25a0c9ec933f3da01961107612251485e"},
   org.clojure/clojurescript {:mvn/version "1.10.520"},
   org.clojure/clojure {:mvn/version "1.10.0"}},
  :aliases
- {:cambada
-  {:extra-deps {luchiniatwork/cambada {:mvn/version "1.0.0"}}}},
+ {:repl
+  {:extra-deps
+   {nuid/repl
+    {:git/url "git@github.com:nuid/repl",
+     :sha "4e6d77e2419b38b1e913b1cba65b23fe3c123b52"}}}},
  :paths ["src"]}
