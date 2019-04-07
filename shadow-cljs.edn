@@ -1,12 +1,16 @@
 {:builds
  {:browser
-  {:modules {:browser {:entries [nuid.cryptography]}}
+  {:modules {:nuid_cryptography {:entries [nuid.cryptography]}}
    :output-dir "target/browser"
    :asset-path "target/browser"
-   :target :browser}
+   :target :browser
+   :compiler-options
+   {:externs ["externs/bn.ext.js"]}}
 
   :node
   {:output-to "target/node/nuid_cryptography.js"
    :exports-var nuid.cryptography/exports
-   :target :node-library}}
+   :target :node-library
+   :compiler-options
+   {:externs ["externs/bn.ext.js"]}}}
  :deps {:aliases []}}

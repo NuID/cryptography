@@ -1,13 +1,22 @@
 {:deps
  {nuid/bn
-  {:git/url "git@github.com:nuid/bn.git",
-   :sha "760b472a8f63fbdb97ca79be49933249a7b3af62"},
+  {:git/url "https://github.com/nuid/bn.git",
+   :sha "aeaef77c67df36508037ce2a2ed6b8d5bc34ae36"},
   org.clojure/clojurescript {:mvn/version "1.10.520"},
-  org.clojure/clojure {:mvn/version "1.10.0"}},
+  org.clojure/clojure {:mvn/version "1.10.0"},
+  nuid/base64
+  {:git/url "https://github.com/nuid/base64.git",
+   :sha "1863b97cb16f5efbc443522171f6daa150b61946"},
+  nuid/exception
+  {:git/url "https://github.com/nuid/exception.git",
+   :sha "d534e7373eab85959c1d8502685a98f0d49565f4"},
+  nuid/bytes
+  {:git/url "https://github.com/nuid/bytes.git",
+   :sha "126858632056d06c0ff7564422e7e92b34b46a63"}},
  :aliases
  {:repl
   {:extra-deps
    {nuid/deps
-    {:git/url "git@github.com:nuid/deps.git",
-     :sha "8a32571147caf3c58d89293848d244cc6733d1f7"}}}},
+    {:git/url "https://github.com/nuid/deps.git",
+     :sha "5d8d706579b43b238acb9631e56d867e29afc3fa"}}}},
  :paths ["src"]}
