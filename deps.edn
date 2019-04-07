@@ -1,18 +1,18 @@
 {:deps
  {nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "aeaef77c67df36508037ce2a2ed6b8d5bc34ae36"},
+   :sha "21ccb06eff12d16579164a7f481c56adc47b8baf"},
   org.clojure/clojurescript {:mvn/version "1.10.520"},
   org.clojure/clojure {:mvn/version "1.10.0"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "1863b97cb16f5efbc443522171f6daa150b61946"},
+   :sha "1989ea2cba092506a6b0690f80a37e858bc04365"},
   nuid/exception
   {:git/url "https://github.com/nuid/exception.git",
-   :sha "d534e7373eab85959c1d8502685a98f0d49565f4"},
+   :sha "5cdb72f8dacc08c932417f13a38db3992b4fc5f9"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "126858632056d06c0ff7564422e7e92b34b46a63"}},
+   :sha "f9b726380b3ecf21e3f894e66ce569cd3ec68c9f"}},
  :aliases
  {:repl
   {:extra-deps

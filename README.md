@@ -2,11 +2,11 @@
 
 Cross-platform cryptographic facilities.
 
-# ⚠️  This library has not been independently audited.
+## ⚠️  This library has not been independently audited.
 
 `nuid.cryptography` primarily exists as a way to abstract over platform-specific differences and provide a common interface to the provided functionality across host platforms. In most cases, `nuid.cryptography` delegates directly to a host implemention (e.g. `jvm` `SecureRandom`, `MessageDigest`, etc.., or `brorand`, `hash.js`, etc.. in node and the browser).
 
-## Git issues and other forms of communication regarding this library are welcome. [dev@nuid.io](mailto:dev@nuid.io)
+## Git issues and other communications are warmly welcomed. [dev@nuid.io](mailto:dev@nuid.io)
 
 ## Requirements
 
@@ -14,11 +14,11 @@ Cross-platform cryptographic facilities.
 
 ## From Clojure and ClojureScript
 
-#### tools.deps:
+### tools.deps:
 
 `{nuid/cryptography {:git/url "https://github.com/nuid/cryptography" :sha "..."}`
 
-#### usage:
+### usage:
 
 ```
 $ clj # or shadow-cljs node-repl
@@ -52,7 +52,7 @@ This library aims to be usable from JavaScript. More work is necessary to establ
 
 Currently the main snag is when using `Crypt.generateHashFn`; see below for more information.
 
-#### node:
+### node:
 
 ```
 $ shadow-cljs release node
@@ -70,7 +70,7 @@ $ node
 > hfn("script?");
 ```
 
-#### browser:
+### browser:
 
 ```
 $ shadow-cljs release browser
@@ -93,14 +93,14 @@ The purpose of `nuid.cryptography` and sibling `nuid` libraries (e.g. [`nuid.ecc
 
 Install [`git-hooks`](https://github.com/icefox/git-hooks) and fire away. Make sure not to get bitten by [`externs`](https://clojurescript.org/guides/externs) if modifying `npm` dependencies.
 
-#### formatting:
+### formatting:
 
 ```
 $ clojure -A:cljfmt            # check
 $ clojure -A:cljfmt:cljfmt/fix # fix
 ```
 
-#### dependencies:
+### dependencies:
 
 ```
 ## check
