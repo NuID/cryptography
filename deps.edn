@@ -6,13 +6,13 @@
   org.clojure/clojure {:mvn/version "1.10.0"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "1989ea2cba092506a6b0690f80a37e858bc04365"},
+   :sha "72288c0188863fde3ca8da76c9dc57faae2f39ab"},
   nuid/exception
   {:git/url "https://github.com/nuid/exception.git",
    :sha "5cdb72f8dacc08c932417f13a38db3992b4fc5f9"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "f9b726380b3ecf21e3f894e66ce569cd3ec68c9f"}},
+   :sha "275245959cb38b69e57a41abb016e2796e31b706"}},
  :aliases
  {:repl
   {:extra-deps

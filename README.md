@@ -22,28 +22,28 @@ Cross-platform cryptographic facilities.
 
 ```
 $ clj # or shadow-cljs node-repl
-(require '[nuid.cryptography :as crypt])
-(require '[nuid.bn :as bn]')
+=> (require '[nuid.cryptography :as crypt])
+=> (require '[nuid.bn :as bn])
 
 ;; CSRNG
-(crypt/secure-random-bytes 32)      ;; => 32 CSR bytes
-(def a (crypt/secure-random-bn 32)) ;; => 32 CSR bytes as a nuid.bn/BN
-(bn/add a (bn/from "1"))
+=> (crypt/secure-random-bytes 32)      ;; => 32 CSR bytes
+=> (def a (crypt/secure-random-bn 32)) ;; => 32 CSR bytes as a nuid.bn/BN
+=> (bn/add a (bn/from "1"))
 
 ;; hashing
-(crypt/sha256 nil "bye!")
-(def salt (crypt/generate-salt 32))
-(crypt/sha256 {:salt salt} "salted")
+=> (crypt/sha256 nil "bye!")
+=> (def salt (crypt/generate-salt 32))
+=> (crypt/sha256 {:salt salt} "salted")
 
 ;; The nuid.cryptography/generate-hashfn multifn allows for the specification and
-;; hydration of hash functions from pure data.
+;; hydration of hash functions from data.
 ;; NOTE: scrypt is currently only implemented for node and the browser.
 ;; NOTE: see nuid.cryptography/generate-scrypt-parameters defaults
-(def scrypt-params (crypt/generate-scrypt-parameters {:n 8192}))
-(def hfn (crypt/generate-hashfn scrypt-params))
+=> (def scrypt-params (crypt/generate-scrypt-parameters {:n 8192}))
+=> (def hfn (crypt/generate-hashfn scrypt-params))
 
 ;; hash functions generated this way add a :result key to the input opts which is the hash digest
-(:result (hfn "bye!"))
+=> (:result (hfn "bye!"))
 ```
 
 ## From JavaScript
@@ -65,7 +65,8 @@ $ node
 > var hfn = Crypt.generateHashFn(Crypt.generateScryptParameters());
 
 // NOTE: This will work, but will return clojure types.
-// In advanced compilation, fields will be named non-deterministically, which makes this facility essentially unusable.
+// In advanced compilation, fields will be named non-deterministically
+// which makes this facility essentially unusable.
 // transit-js may alleviate this issue.
 > hfn("script?");
 ```
