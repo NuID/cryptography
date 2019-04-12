@@ -4,7 +4,7 @@ Cross-platform cryptographic facilities.
 
 ## ⚠️  This library has not been independently audited.
 
-`nuid.cryptography` primarily exists as a way to abstract over platform-specific differences and provide a common interface to the provided functionality across host platforms. In most cases, `nuid.cryptography` delegates directly to a host implemention (e.g. `jvm` `SecureRandom`, `MessageDigest`, etc.., or `brorand`, `hash.js`, etc.. in node and the browser).
+`nuid.cryptography` primarily exists to abstract over platform-specific differences and provide a common interface to the provided functionality across host platforms. In most cases, `nuid.cryptography` delegates directly to a host implemention (e.g. `SecureRandom`, `MessageDigest`, etc. on the `jvm`, and `brorand`, `hash.js`, etc. in `node` and the browser).
 
 ## Git issues and other communications are warmly welcomed. [dev@nuid.io](mailto:dev@nuid.io)
 
@@ -27,30 +27,29 @@ $ clj # or shadow-cljs node-repl
 
 ;; CSRNG
 => (crypt/secure-random-bytes 32)      ;; => 32 CSR bytes
-=> (def a (crypt/secure-random-bn 32)) ;; => 32 CSR bytes as a nuid.bn/BN
+=> (def a (crypt/secure-random-bn 32)) ;; => 32 CSR bytes as a BN
 => (bn/add a (bn/from "1"))
 
 ;; hashing
-=> (crypt/sha256 nil "bye!")
-=> (def salt (crypt/generate-salt 32))
-=> (crypt/sha256 {:salt salt} "salted")
+=> (crypt/sha256 "bye!")
+=> (def salt (crypt/salt 32))
+=> (crypt/sha256 "salted" {:salt salt})
 
-;; The nuid.cryptography/generate-hashfn multifn allows for the specification and
+;; The nuid.cryptography/hashfn multifn allows for the specification and
 ;; hydration of hash functions from data.
 ;; NOTE: scrypt is currently only implemented for node and the browser.
-;; NOTE: see nuid.cryptography/generate-scrypt-parameters defaults
-=> (def scrypt-params (crypt/generate-scrypt-parameters {:n 8192}))
-=> (def hfn (crypt/generate-hashfn scrypt-params))
+;; NOTE: see nuid.cryptography/scrypt-parameters defaults
+=> (def hfn (crypt/hashfn (crypt/scrypt-parameters)))
 
-;; hash functions generated this way add a :result key to the input opts which is the hash digest
-=> (:result (hfn "bye!"))
+;; hash functions generated this way add a :digest key to the input opts
+=> (:digest (hfn "bye!"))
 ```
 
 ## From JavaScript
 
-This library aims to be usable from JavaScript. More work is necessary to establish the most convient consumption patterns, which will likely ultimatlye involve [`transit-js`](https://github.com/cognitect/transit-js) in place of the calls to `clj->js` and `js->clj` in `nuid.cryptography/wrap-export`.
+This library aims to be usable from JavaScript. More work is necessary to establish the most convient consumption patterns, which will likely involve [`transit-js`](https://github.com/cognitect/transit-js) in place of the calls to `clj->js` and `js->clj` in `nuid.cryptography/wrap-export`.
 
-Currently the main snag is when using `Crypt.generateHashFn`; see below for more information.
+Currently the main snag is when using `Crypt.hashFn`; see below for more information.
 
 ### node:
 
@@ -61,8 +60,8 @@ $ node
 > Crypt.secureRandomBytes(32);
 > Crypt.secureRandomBn(32);
 > Crypt.sha256("bye!");
-> Crypt.scrypt("ess-crypt, not skreeyupt!");
-> var hfn = Crypt.generateHashFn(Crypt.generateScryptParameters());
+> Crypt.scrypt("ess-crypt not skreeyupt");
+> var hfn = Crypt.hashFn(Crypt.scryptParameters());
 
 // NOTE: This will work, but will return clojure types.
 // In advanced compilation, fields will be named non-deterministically
@@ -88,7 +87,7 @@ Coming soon.
 
 ## Notes
 
-The purpose of `nuid.cryptography` and sibling `nuid` libraries (e.g. [`nuid.ecc`](https://github.com/nuid/ecc)) is to abstract over platform-specific differences and provide a common interface to fundamental dependencies. This allows us to express dependent logic (e.g. [`nuid.zka`](https://github.com/nuid/zka)) once in pure Clojure(Script), and use it from each of the host platforms (Java, JavaScript, CLR). This is particularly useful for generating and verifying proofs across service boundaries. Along with [`tools.deps`](https://clojure.org/guides/deps_and_cli), this approach yields the code-sharing, circular-dependency avoidance, and local development benefits of a monorepo, with the modularity and orthogonality of an isolated library.
+The purpose of `nuid.cryptography` and sibling `nuid` libraries (e.g. [`nuid.elliptic`](https://github.com/nuid/elliptic)) is to abstract over platform-specific differences and provide a common interface to fundamental dependencies. This allows us to express dependent logic (e.g. [`nuid.zk`](https://github.com/nuid/zk)) once in pure Clojure(Script), and use it from each of the host platforms (Java, JavaScript, CLR). This is particularly useful for generating and verifying proofs across service boundaries. Along with [`tools.deps`](https://clojure.org/guides/deps_and_cli), this approach yields the code-sharing, circular-dependency avoidance, and local development benefits of a monorepo, with the modularity and orthogonality of an isolated library.
 
 ## Contributing
 
