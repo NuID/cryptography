@@ -16,7 +16,7 @@ Cross-platform cryptographic facilities.
 
 ### tools.deps:
 
-`{nuid/cryptography {:git/url "https://github.com/nuid/cryptography" :sha "..."}`
+`{nuid/cryptography {:git/url "https://github.com/nuid/cryptography" :sha "..."}}`
 
 ### usage:
 
