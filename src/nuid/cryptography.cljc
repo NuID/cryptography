@@ -40,9 +40,9 @@
                      "NFKD" Normalizer$Form/NFKD
                      "NFC"  Normalizer$Form/NFC
                      "NFD"  Normalizer$Form/NFD)]
-          (Normalizer/normalize x form)))))
+          (Normalizer/normalize x form))))))
 
-   :cljs
+#?(:cljs
    (extend-protocol Normalizable
      string
      (normalize
@@ -93,9 +93,9 @@
        ([x] (scrypt x (scrypt-parameters)))
        ([x opts]
         (let [m "nuid.cryptoraphy does not yet provide scrypt on the jvm."]
-          (exception/throw! {:message m})))))
+          (exception/throw! {:message m}))))))
 
-   :cljs
+#?(:cljs
    (extend-protocol Hashable
      string
      (sha256
