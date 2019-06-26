@@ -59,7 +59,7 @@
             p 1
             key-length 32
             normalization-form "NFKC"}}]]
-  {:id :scrypt
+  {:id "scrypt"
    :salt salt
    :n n
    :r r
@@ -117,11 +117,11 @@
           (scryptjs b salt n r p key-length))))))
 
 (defmulti hashfn :id)
-(defmethod hashfn :sha256 [opts]
+(defmethod hashfn "sha256" [opts]
   (fn [a] (assoc opts :digest (sha256 a opts))))
-(defmethod hashfn :sha512 [opts]
+(defmethod hashfn "sha512" [opts]
   (fn [a] (assoc opts :digest (sha512 a opts))))
-(defmethod hashfn :scrypt [opts]
+(defmethod hashfn "scrypt" [opts]
   (let [opts (scrypt-parameters opts)]
     (fn [a] (assoc opts :digest (scrypt a opts)))))
 
