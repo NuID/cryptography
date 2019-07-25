@@ -47,16 +47,15 @@ $ clj # or shadow-cljs node-repl
 
 ## From JavaScript
 
-This library aims to be usable from JavaScript. More work is necessary to establish the most convient consumption patterns, which will likely involve [`transit-js`](https://github.com/cognitect/transit-js) in place of the calls to `clj->js` and `js->clj` in `nuid.cryptography/wrap-export`.
+This library aims to be usable from JavaScript. More work is necessary to establish the most convient consumption patterns.
 
 Currently the main snag is when using `Crypt.hashFn`; see below for more information.
 
 ### node:
 
 ```
-$ shadow-cljs release node
 $ node
-> var Crypt = require('./target/node/nuid_cryptography');
+> var Crypt = require('@nuid/cryptography');
 > Crypt.secureRandomBytes(32);
 > Crypt.secureRandomBn(32);
 > Crypt.sha256("bye!");
@@ -66,16 +65,12 @@ $ node
 // NOTE: This will work, but will return clojure types.
 // In advanced compilation, fields will be named non-deterministically
 // which makes this facility essentially unusable.
-// transit-js may alleviate this issue.
 > hfn("script?");
 ```
 
 ### browser:
 
-```
-$ shadow-cljs release browser
-## go use ./target/browser/nuid_cryptography.js in a browser script
-```
+The `npm` package is browser compatible in Webpack-like workflows.
 
 ## From Java
 
