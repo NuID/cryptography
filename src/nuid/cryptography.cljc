@@ -19,8 +19,8 @@
                       (.nextBytes srand b)
                       b)))
      :cljs brand))
-
 (def secure-random-bn (comp bn/from secure-random-bytes))
+(def secure-random-base64 (comp base64/encode secure-random-bytes))
 
 (defn secure-random-bn-lt [n lt]
   (let [ret (secure-random-bn n)]
@@ -49,18 +49,15 @@
        ([x] (normalize x "NFKC"))
        ([x form] (.normalize x form)))))
 
-(def salt (comp base64/encode secure-random-bytes))
-
 (defn scrypt-parameters
   [& [{:keys [salt n r p key-length normalization-form]
-       :or {salt (salt 32)
-            n 16384
+       :or {n 16384
             r 16
             p 1
             key-length 32
             normalization-form "NFKC"}}]]
   {:id "scrypt"
-   :salt salt
+   :salt (or salt (secure-random-base64 32))
    :n n
    :r r
    :p p
@@ -134,11 +131,11 @@
 #?(:cljs
    (def exports
      #js {:scryptParameters (wrap-export scrypt-parameters)
+          :secureRandomBase64 secure-random-base64
           :secureRandomBytes secure-random-bytes
           :secureRandomBnLt secure-random-bn-lt
           :secureRandomBn secure-random-bn
           :scrypt (wrap-export scrypt)
           :sha512 (wrap-export sha512)
           :sha256 (wrap-export sha256)
-          :hashFn (wrap-export hashfn)
-          :salt salt}))
+          :hashFn (wrap-export hashfn)}))
