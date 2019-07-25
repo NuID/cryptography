@@ -6,13 +6,13 @@
    :sha "ee6ecb7f6c941999b25f27f17d145df7f6d0458b"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "097acbb96c20b27bbfe41271efaf281d157d2a00"},
+   :sha "b2c5fc2b08b6a047207d2de6a385ec8efa67c6c1"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "a33fede5dbd2b160b79279c84ca6faa35a121dd8"},
+   :sha "9b15de73e65a61683e42f74df45a6eaf20503267"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "64cfb07495bdfe65738d134279b5343986452e70"}},
+   :sha "051605abb0f56a09bcf11d3dd94e596559aed279"}},
  :aliases
  {:cljfmt
   {:extra-deps
