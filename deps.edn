@@ -3,16 +3,16 @@
   org.clojure/clojure {:mvn/version "1.10.1"},
   nuid/exception
   {:git/url "https://github.com/nuid/exception.git",
-   :sha "ee6ecb7f6c941999b25f27f17d145df7f6d0458b"},
+   :sha "83cfb220d5c8efda6c42ea557e56617bfc568730"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "b2c5fc2b08b6a047207d2de6a385ec8efa67c6c1"},
+   :sha "df3d157be26f468ae138e9be03460bdcf2002343"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "9b15de73e65a61683e42f74df45a6eaf20503267"},
+   :sha "93b7ea3e269ce7f8b5f76cf388ec4bab84304443"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "051605abb0f56a09bcf11d3dd94e596559aed279"}},
+   :sha "0ba2cec3f99e12ece58c6a494563ed4249602602"}},
  :aliases
  {:cljfmt
   {:extra-deps
@@ -30,5 +30,5 @@
   {:extra-deps
    {nuid/deps
     {:git/url "https://github.com/nuid/deps.git",
-     :sha "168230c31b8b38168377cc177b39a2d87b67ed1f"}}}},
+     :sha "6af0c2207e7b4bd4e0efc369ed69ab65f8e1cd74"}}}},
  :paths ["src"]}
