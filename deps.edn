@@ -3,16 +3,16 @@
   org.clojure/clojure {:mvn/version "1.10.1"},
   nuid/exception
   {:git/url "https://github.com/nuid/exception.git",
-   :sha "83cfb220d5c8efda6c42ea557e56617bfc568730"},
+   :sha "5a537198119b714676c68e21e7f97fe1ef675db0"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "f80f212de6ccfdb2f148d03db53e1894ca8f45e7"},
+   :sha "d4aa37ea2c4d2a2ed8abf70789a4f804c4f63140"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "93b7ea3e269ce7f8b5f76cf388ec4bab84304443"},
+   :sha "2e1676fdc47acf2418ca520ce0777a21fe93f0d0"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "daead7eb14f29ed8e2b4a780904e0aeb5aef62f0"}},
+   :sha "1f697015e68c6d30fd03ddd052fcc54ef4726d01"}},
  :aliases
  {:cljfmt
   {:extra-deps
@@ -25,7 +25,7 @@
   {:extra-deps {olical/depot {:mvn/version "1.8.4"}},
    :main-opts ["-m" "depot.outdated.main"]},
   :depot/update {:main-opts ["-m" "depot.outdated.main --update"]},
-  :shadow {:extra-deps {thheller/shadow-cljs {:mvn/version "2.8.40"}}},
+  :shadow {:extra-deps {thheller/shadow-cljs {:mvn/version "2.8.52"}}},
   :repl
   {:extra-deps
    {nuid/deps
