@@ -12,7 +12,7 @@
    :sha "cc25c2428e33a1e13386c0858b56d83d9a8f38ba"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "1f697015e68c6d30fd03ddd052fcc54ef4726d01"}},
+   :sha "c04d72b76545fba03aa7cede9d9349c0175f145d"}},
  :aliases
  {:cljfmt
   {:extra-deps
