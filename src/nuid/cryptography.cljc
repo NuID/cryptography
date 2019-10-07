@@ -1,30 +1,75 @@
 (ns nuid.cryptography
+  (:refer-clojure :exclude [bytes])
   (:require
-   [nuid.exception :as exception]
    [nuid.base64 :as base64]
    [nuid.bytes :as bytes]
    [nuid.bn :as bn]
-   #?@(:cljs
-       [["scryptsy" :as scryptjs]
-        ["brorand" :as brand]
+   #?@(:clj
+       [[clojure.spec-alpha2.gen :as gen]
+        [clojure.spec-alpha2 :as s]]
+       :cljs
+       [[clojure.spec.gen.alpha :as gen]
+        [clojure.test.check.generators]
+        [clojure.spec.alpha :as s]
+        ["brorand" :as secure-random]
+        ["scryptsy" :as scryptjs]
         ["hash.js" :as h]]))
   #?@(:clj
       [(:import
+        (org.bouncycastle.crypto.generators SCrypt)
         (java.security MessageDigest SecureRandom)
         (java.text Normalizer Normalizer$Form))]))
 
 (def secure-random-bytes
-  #?(:clj (let [srand (SecureRandom.)]
-            (fn [n] (let [b (byte-array n)]
-                      (.nextBytes srand b)
-                      b)))
-     :cljs brand))
-(def secure-random-bn (comp bn/from secure-random-bytes))
-(def secure-random-base64 (comp base64/encode secure-random-bytes))
+  #?(:clj (let [secure-random (SecureRandom.)]
+            (fn [num-bytes]
+              (let [bs (byte-array num-bytes)]
+                (.nextBytes secure-random bs)
+                bs)))
+     :cljs (comp bytes/from secure-random)))
 
-(defn secure-random-bn-lt [n lt]
-  (let [ret (secure-random-bn n)]
-    (if (bn/lt? ret lt) ret (recur n lt))))
+(s/def ::secure-random-bytes
+  (s/with-gen
+    bytes/bytes?
+    (fn [] (->> (gen/gen-for-pred pos-int?)
+                (gen/fmap secure-random-bytes)))))
+
+(defn secure-random-bytes-generator
+  [num-bytes]
+  (->> (gen/return num-bytes)
+       (gen/fmap secure-random-bytes)))
+
+(defn secure-random-bn-generator
+  [num-bytes]
+  (->> (secure-random-bytes-generator num-bytes)
+       (gen/fmap bn/from)))
+
+(defn secure-random-bn-lt-generator
+  [num-bytes lt]
+  (let [g (secure-random-bn-generator num-bytes)]
+    (gen/such-that #(bn/lt? % lt) g 500)))
+
+(defn generate-secure-random-bn-lt
+  [num-bytes lt]
+  (gen/generate
+   (secure-random-bn-lt-generator num-bytes lt)))
+
+(defn secure-random-base64-generator
+  [num-bytes]
+  (->> (secure-random-bytes-generator num-bytes)
+       (gen/fmap base64/encode)))
+
+(s/def ::nonce
+  (s/with-gen
+    ::bn/bn
+    (fn [] (secure-random-bn-generator 32))))
+
+(s/def ::salt
+  (s/with-gen
+    ::base64/encoded
+    (fn [] (secure-random-base64-generator 32))))
+
+(s/def ::normalization-form #{"NFC" "NFKC" "NFD" "NFKD"})
 
 (defprotocol Normalizable
   (normalize [x] [x form]))
@@ -49,20 +94,77 @@
        ([x] (normalize x "NFKC"))
        ([x form] (.normalize x form)))))
 
-(defn scrypt-parameters
-  [& [{:keys [salt n r p key-length normalization-form]
-       :or {n 16384
-            r 16
-            p 1
-            key-length 32
-            normalization-form "NFKC"}}]]
-  {:id "scrypt"
-   :salt (or salt (secure-random-base64 32))
-   :n n
-   :r r
-   :p p
-   :key-length key-length
-   :normalization-form normalization-form})
+(s/def ::id #{"scrypt" "sha512" "sha256"})
+
+;; TODO: clean up once cljs supports `s/select`
+(s/def ::sha2-base-parameters
+  (s/keys :req-un [::id ::normalization-form]
+          :opt-un [::salt]))
+
+(s/def ::sha256-parameters
+  (s/with-gen
+    (s/and ::sha2-base-parameters #(= "sha256" (:id %)))
+    (fn [] (->> (s/gen ::sha2-base-parameters)
+                (gen/fmap #(merge % {:id "sha256"}))))))
+
+(def default-sha256-parameters-generator
+  (->> (s/gen ::sha256-parameters)
+       (gen/fmap #(assoc % :normalization-form "NFKC"))
+       (gen/fmap #(dissoc % :salt))))
+
+(def default-sha256-parameters
+  (gen/generate
+   default-sha256-parameters-generator))
+
+(s/def ::salted? (s/keys :req-un [::salt]))
+
+(s/def ::salted-sha256-parameters
+  (s/merge ::salted? ::sha256-parameters))
+
+(s/def ::sha512-parameters
+  (s/with-gen
+    (s/and ::sha2-base-parameters #(= "sha512" (:id %)))
+    (fn [] (->> (s/gen ::sha2-base-parameters)
+                (gen/fmap #(merge % {:id "sha512"}))))))
+
+(s/def ::n #{1024 2048 4096 8192 16384 32768 65536})
+(s/def ::r #{8 16 24})
+(s/def ::p #{1})
+(s/def ::key-length #{10 12 16 20 24 32 64})
+
+(s/def ::scrypt-base-parameters
+  (s/merge
+   ::sha2-base-parameters
+   (s/keys :req-un [::n ::r ::p ::key-length ::salt])))
+
+(s/def ::scrypt-parameters
+  (s/with-gen
+    (s/and ::scrypt-base-parameters #(= "scrypt" (:id %)))
+    (fn [] (->> (s/gen ::scrypt-base-parameters)
+                (gen/fmap #(merge % {:id "scrypt"}))))))
+
+(def default-scrypt-parameters-generator
+  (->> (s/gen ::scrypt-parameters)
+       (gen/fmap (fn [m] (merge m {:n 16384
+                                   :r 8
+                                   :key-length 32
+                                   :normalization-form "NFKC"})))))
+
+(def generate-default-scrypt-parameters
+  (partial
+   gen/generate
+   default-scrypt-parameters-generator))
+
+(s/def ::keyfn-parameters
+  (s/or
+   ::sha256 ::salted-sha256-parameters
+   ::scrypt ::scrypt-parameters))
+
+(s/def ::hashfn-parameters
+  (s/or
+   ::sha256 ::sha256-parameters
+   ::sha512 ::sha512-parameters
+   ::scrypt ::scrypt-parameters))
 
 (defprotocol Hashable
   (sha256 [x] [x opts])
@@ -79,18 +181,21 @@
               n (normalize x (:normalization-form opts))]
           (let [md (MessageDigest/getInstance "SHA-256")]
             (.digest md (bytes/from n))))))
+
      (sha512
-       ([x] (sha512 x {:normalization-from "NFKC"}))
+       ([x] (sha512 x {:normalization-form "NFKC"}))
        ([x opts]
         (let [x (if-let [s (:salt opts)] (str x s) x)
               n (normalize x (:normalization-form opts))]
           (let [md (MessageDigest/getInstance "SHA-512")]
             (.digest md (bytes/from n))))))
+
      (scrypt
-       ([x] (scrypt x (scrypt-parameters)))
-       ([x opts]
-        (let [m "nuid.cryptoraphy does not yet provide scrypt on the jvm."]
-          (exception/throw! {:message m}))))))
+       ([x] (scrypt x (generate-default-scrypt-parameters)))
+       ([x {:keys [salt n r p key-length normalization-form]}]
+        (let [x (bytes/from (normalize x normalization-form))
+              s (bytes/from salt)]
+          (SCrypt/generate x s n r p key-length))))))
 
 #?(:cljs
    (extend-protocol Hashable
@@ -101,41 +206,99 @@
         (let [x (if-let [s (:salt opts)] (str x s) x)
               n (normalize x (:normalization-form opts))]
           (bytes/from (.digest (.update (h/sha256) n))))))
+
      (sha512
        ([x] (sha512 x {:normalization-form "NFKC"}))
        ([x opts]
         (let [x (if-let [s (:salt opts)] (str x s) x)
               n (normalize x (:normalization-form opts))]
           (bytes/from (.digest (.update (h/sha512) n))))))
+
      (scrypt
-       ([x] (scrypt x (scrypt-parameters)))
+       ([x] (scrypt x (generate-default-scrypt-parameters)))
        ([x {:keys [salt n r p key-length normalization-form]}]
         (let [b (bytes/from (normalize x normalization-form))]
           (scryptjs b salt n r p key-length))))))
 
-(defmulti hashfn :id)
-(defmethod hashfn "sha256" [opts]
-  (fn [a] (assoc opts :digest (sha256 a opts))))
-(defmethod hashfn "sha512" [opts]
-  (fn [a] (assoc opts :digest (sha512 a opts))))
-(defmethod hashfn "scrypt" [opts]
-  (let [opts (scrypt-parameters opts)]
-    (fn [a] (assoc opts :digest (scrypt a opts)))))
+(defmulti generate-hashfn
+  (fn [opts]
+    (let [opts (s/conform ::hashfn-parameters opts)]
+      (if (s/invalid? opts)
+        opts
+        (first opts)))))
 
-#?(:cljs
-   (defn wrap-export [f]
-     (let [xf (fn [a] (let [a (js->clj a :keywordize-keys true)]
-                        (if (:id a) (update a :id keyword) a)))]
-       (fn [& args] (clj->js (apply f (map xf args)))))))
+(defmethod generate-hashfn ::sha256
+  [opts]
+  (fn [x] (assoc opts :digest (sha256 x opts))))
 
-#?(:cljs
-   (def exports
-     #js {:scryptParameters (wrap-export scrypt-parameters)
-          :secureRandomBase64 secure-random-base64
-          :secureRandomBytes secure-random-bytes
-          :secureRandomBnLt secure-random-bn-lt
-          :secureRandomBn secure-random-bn
-          :scrypt (wrap-export scrypt)
-          :sha512 (wrap-export sha512)
-          :sha256 (wrap-export sha256)
-          :hashFn (wrap-export hashfn)}))
+(defmethod generate-hashfn ::sha512
+  [opts]
+  (fn [x] (assoc opts :digest (sha512 x opts))))
+
+(defmethod generate-hashfn ::scrypt
+  [opts]
+  (let [opts (merge (generate-default-scrypt-parameters) opts)]
+    (fn [x] (assoc opts :digest (scrypt x opts)))))
+
+(s/def ::conformed-hashfn
+  (s/and
+   fn?
+   #(s/valid? ::hashfn-parameters (::opts (meta %)))))
+
+(s/def ::hashfn
+  (s/with-gen
+    (s/conformer
+     (fn [x]
+       (if (s/valid? ::conformed-hashfn x)
+         x
+         (let [x (s/conform ::hashfn-parameters x)]
+           (if (s/invalid? x)
+             x
+             (with-meta
+               (generate-hashfn (second x))
+               {::opts (second x)})))))
+     (fn [x]
+       (if (s/valid? ::hashfn-parameters x)
+         x
+         (if (s/valid? ::hashfn-parameters (::opts (meta x)))
+           (::opts (meta x))
+           ::s/invalid))))
+    (fn [] (s/gen ::hashfn-parameters))))
+
+#?(:cljs (def exports #js {}))
+
+(comment
+
+  ;; spec 2
+
+  (s/def ::sha256-parameters
+    (s/select
+     [{:id #{"sha256"}
+       :normalization-form ::normalization-form}]
+     [*]))
+
+  (s/def ::salted? (s/select [{:salt ::salt}] [*]))
+
+  (s/def ::salted-sha256-parameters
+    (s/select
+     [{:id #{"sha256"}
+       :salt ::salt
+       :normalization-form ::normalization-form}]
+     [*]))
+
+  (s/def ::sha512-parameters
+    (s/select
+     [{:id #{"sha512"}
+       :normalization-form ::normalization-form}]
+     [*]))
+
+  (s/def ::scrypt-parameters
+    (s/select
+     [{:id #{"scrypt"}
+       :salt ::salt
+       :n ::n
+       :r ::r
+       :p ::p
+       :key-length ::key-length
+       :normalization-form ::normalization-form}]
+     [*])))
