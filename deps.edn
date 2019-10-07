@@ -1,18 +1,21 @@
 {:deps
- {org.clojure/clojurescript {:mvn/version "1.10.520"},
+ {org.bouncycastle/bcprov-jdk15on {:mvn/version "1.63"},
   org.clojure/clojure {:mvn/version "1.10.1"},
-  nuid/exception
-  {:git/url "https://github.com/nuid/exception.git",
-   :sha "ba62e8b49e4b837befe67ecaeda03ec189d7db03"},
+  org.clojure/spec-alpha2
+  {:git/url "https://github.com/clojure/spec-alpha2",
+   :sha "683e507a9647b65a248a5e00d314f9cfaaa2ce56"},
+  org.clojure/spec.alpha {:mvn/version "0.2.176"},
+  org.clojure/clojurescript {:mvn/version "1.10.520"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "8d68cc9dba977f934a5df09ca0abc61a0e67603a"},
+   :sha "ac35b5185633e2268f2127367a8a0b933e1b250d"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "147bb4a9a28f14c6632f9fc53cad0abd17578f46"},
+   :sha "0acd21917c00af6e8157896a06a7eb91b363e4a8"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "232c50cee0e243edceccf8f81a340cecb98414a3"}},
+   :sha "959cb35915ff675ccc67f594a4a136aa5d81f552"},
+  org.clojure/test.check {:mvn/version "0.10.0"}},
  :aliases
  {:cljfmt
   {:extra-deps
@@ -25,10 +28,10 @@
   {:extra-deps {olical/depot {:mvn/version "1.8.4"}},
    :main-opts ["-m" "depot.outdated.main"]},
   :depot/update {:main-opts ["-m" "depot.outdated.main --update"]},
-  :shadow {:extra-deps {thheller/shadow-cljs {:mvn/version "2.8.52"}}},
+  :shadow {:extra-deps {thheller/shadow-cljs {:mvn/version "2.8.55"}}},
   :repl
   {:extra-deps
    {nuid/deps
     {:git/url "https://github.com/nuid/deps.git",
-     :sha "1cf5069bc708adf9f2809f3917cc9c5e971f28a0"}}}},
+     :sha "343a267df77b08124caf001c0a49916c4b2b7a8a"}}}},
  :paths ["src"]}
