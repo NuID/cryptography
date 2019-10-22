@@ -47,7 +47,7 @@
 (defn secure-random-bn-lt-generator
   [num-bytes lt]
   (let [g (secure-random-bn-generator num-bytes)]
-    (gen/such-that #(bn/lt? % lt) g 500)))
+    (gen/such-that (fn [n] (bn/lt? n lt)) g 500)))
 
 (defn generate-secure-random-bn-lt
   [num-bytes lt]
@@ -103,14 +103,15 @@
 
 (s/def ::sha256-parameters
   (s/with-gen
-    (s/and ::sha2-base-parameters #(= "sha256" (:id %)))
+    (s/and ::sha2-base-parameters
+           (fn [m] (= "sha256" (:id m))))
     (fn [] (->> (s/gen ::sha2-base-parameters)
-                (gen/fmap #(merge % {:id "sha256"}))))))
+                (gen/fmap (fn [m] (merge m {:id "sha256"})))))))
 
 (def default-sha256-parameters-generator
   (->> (s/gen ::sha256-parameters)
-       (gen/fmap #(assoc % :normalization-form "NFKC"))
-       (gen/fmap #(dissoc % :salt))))
+       (gen/fmap (fn [m] (assoc m :normalization-form "NFKC")))
+       (gen/fmap (fn [m] (dissoc m :salt)))))
 
 (def default-sha256-parameters
   (gen/generate
@@ -123,9 +124,10 @@
 
 (s/def ::sha512-parameters
   (s/with-gen
-    (s/and ::sha2-base-parameters #(= "sha512" (:id %)))
+    (s/and ::sha2-base-parameters
+           (fn [m] (= "sha512" (:id m))))
     (fn [] (->> (s/gen ::sha2-base-parameters)
-                (gen/fmap #(merge % {:id "sha512"}))))))
+                (gen/fmap (fn [m] (merge m {:id "sha512"})))))))
 
 (s/def ::n #{1024 2048 4096 8192 16384 32768 65536})
 (s/def ::r #{8 16 24})
@@ -139,9 +141,10 @@
 
 (s/def ::scrypt-parameters
   (s/with-gen
-    (s/and ::scrypt-base-parameters #(= "scrypt" (:id %)))
+    (s/and ::scrypt-base-parameters
+           (fn [m] (= "scrypt" (:id m))))
     (fn [] (->> (s/gen ::scrypt-base-parameters)
-                (gen/fmap #(merge % {:id "scrypt"}))))))
+                (gen/fmap (fn [m] (merge m {:id "scrypt"})))))))
 
 (def default-scrypt-parameters-generator
   (->> (s/gen ::scrypt-parameters)
@@ -266,39 +269,3 @@
     (fn [] (s/gen ::hashfn-parameters))))
 
 #?(:cljs (def exports #js {}))
-
-(comment
-
-  ;; spec 2
-
-  (s/def ::sha256-parameters
-    (s/select
-     [{:id #{"sha256"}
-       :normalization-form ::normalization-form}]
-     [*]))
-
-  (s/def ::salted? (s/select [{:salt ::salt}] [*]))
-
-  (s/def ::salted-sha256-parameters
-    (s/select
-     [{:id #{"sha256"}
-       :salt ::salt
-       :normalization-form ::normalization-form}]
-     [*]))
-
-  (s/def ::sha512-parameters
-    (s/select
-     [{:id #{"sha512"}
-       :normalization-form ::normalization-form}]
-     [*]))
-
-  (s/def ::scrypt-parameters
-    (s/select
-     [{:id #{"scrypt"}
-       :salt ::salt
-       :n ::n
-       :r ::r
-       :p ::p
-       :key-length ::key-length
-       :normalization-form ::normalization-form}]
-     [*])))
