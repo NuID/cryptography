@@ -8,7 +8,7 @@
   org.clojure/clojurescript {:mvn/version "1.10.520"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "6282194a235a3f759b4582a6281d3b628ae544f7"},
+   :sha "349f8a2ce9cf2f252f8107a697ed88f4b8080e58"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
    :sha "4cacb42a852f915176997a31c268e7be12eccfea"},
