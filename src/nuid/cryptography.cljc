@@ -31,18 +31,22 @@
 (s/def ::secure-random-bytes
   (s/with-gen
     bytes/bytes?
-    (fn [] (->> (gen/gen-for-pred pos-int?)
-                (gen/fmap secure-random-bytes)))))
+    (fn []
+      (->>
+       (gen/gen-for-pred pos-int?)
+       (gen/fmap secure-random-bytes)))))
 
 (defn secure-random-bytes-generator
   [num-bytes]
-  (->> (gen/return num-bytes)
-       (gen/fmap secure-random-bytes)))
+  (->>
+   (gen/return num-bytes)
+   (gen/fmap secure-random-bytes)))
 
 (defn secure-random-bn-generator
   [num-bytes]
-  (->> (secure-random-bytes-generator num-bytes)
-       (gen/fmap bn/from)))
+  (->>
+   (secure-random-bytes-generator num-bytes)
+   (gen/fmap bn/from)))
 
 (defn secure-random-bn-lt-generator
   [num-bytes lt]
@@ -56,8 +60,9 @@
 
 (defn secure-random-base64-generator
   [num-bytes]
-  (->> (secure-random-bytes-generator num-bytes)
-       (gen/fmap base64/encode)))
+  (->>
+   (secure-random-bytes-generator num-bytes)
+   (gen/fmap base64/encode)))
 
 (s/def ::nonce
   (s/with-gen
@@ -105,13 +110,16 @@
   (s/with-gen
     (s/and ::sha2-base-parameters
            (fn [m] (= "sha256" (:id m))))
-    (fn [] (->> (s/gen ::sha2-base-parameters)
-                (gen/fmap (fn [m] (merge m {:id "sha256"})))))))
+    (fn []
+      (->>
+       (s/gen ::sha2-base-parameters)
+       (gen/fmap (fn [m] (merge m {:id "sha256"})))))))
 
 (def default-sha256-parameters-generator
-  (->> (s/gen ::sha256-parameters)
-       (gen/fmap (fn [m] (assoc m :normalization-form "NFKC")))
-       (gen/fmap (fn [m] (dissoc m :salt)))))
+  (->>
+   (s/gen ::sha256-parameters)
+   (gen/fmap (fn [m] (assoc m :normalization-form "NFKC")))
+   (gen/fmap (fn [m] (dissoc m :salt)))))
 
 (def default-sha256-parameters
   (gen/generate
@@ -126,8 +134,10 @@
   (s/with-gen
     (s/and ::sha2-base-parameters
            (fn [m] (= "sha512" (:id m))))
-    (fn [] (->> (s/gen ::sha2-base-parameters)
-                (gen/fmap (fn [m] (merge m {:id "sha512"})))))))
+    (fn []
+      (->>
+       (s/gen ::sha2-base-parameters)
+       (gen/fmap (fn [m] (merge m {:id "sha512"})))))))
 
 (s/def ::n #{1024 2048 4096 8192 16384 32768 65536})
 (s/def ::r #{8 16 24})
@@ -143,15 +153,18 @@
   (s/with-gen
     (s/and ::scrypt-base-parameters
            (fn [m] (= "scrypt" (:id m))))
-    (fn [] (->> (s/gen ::scrypt-base-parameters)
-                (gen/fmap (fn [m] (merge m {:id "scrypt"})))))))
+    (fn []
+      (->>
+       (s/gen ::scrypt-base-parameters)
+       (gen/fmap (fn [m] (merge m {:id "scrypt"})))))))
 
 (def default-scrypt-parameters-generator
-  (->> (s/gen ::scrypt-parameters)
-       (gen/fmap (fn [m] (merge m {:n 16384
-                                   :r 8
-                                   :key-length 32
-                                   :normalization-form "NFKC"})))))
+  (->>
+   (s/gen ::scrypt-parameters)
+   (gen/fmap (fn [m] (merge m {:n                  16384
+                               :r                  8
+                               :key-length         32
+                               :normalization-form "NFKC"})))))
 
 (def generate-default-scrypt-parameters
   (partial
