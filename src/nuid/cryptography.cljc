@@ -5,8 +5,8 @@
    [nuid.bytes :as bytes]
    [nuid.bn :as bn]
    #?@(:clj
-       [[clojure.spec-alpha2.gen :as gen]
-        [clojure.spec-alpha2 :as s]]
+       [[clojure.alpha.spec.gen :as gen]
+        [clojure.alpha.spec :as s]]
        :cljs
        [[clojure.spec.gen.alpha :as gen]
         [clojure.test.check.generators]

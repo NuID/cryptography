@@ -2,22 +2,22 @@
  {org.bouncycastle/bcprov-jdk15on {:mvn/version "1.64"},
   org.clojure/clojure {:mvn/version "1.10.1"},
   org.clojure/test.check {:mvn/version "0.10.0"},
-  org.clojure/spec-alpha2
+  org.clojure/alpha.spec
   {:git/url "https://github.com/clojure/spec-alpha2",
-   :sha "de38650874c6f0bc19e7755feab4d65b3fffb268"},
+   :sha "8a5f96513582343c68e64686e2f0bd2c44adbe94"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "ad2dd471b31d217465676e73edca3da38f0e3409"},
+   :sha "ab441adf14861b0e4a51329190a6672fbf8d7226"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "c79a24f02700e5d430f6dd91e59de399bd2cd09a"},
+   :sha "d4bbf0382fc404c525064a845892996a95cad7dd"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "ae061648f41e1e75b5ca1bb97d4ac309328590e0"}},
+   :sha "08752d9bb8d9809cd12696fc9639022d9578fcfb"}},
  :aliases
  {:cljs
   {:extra-deps
    {org.clojure/clojurescript {:mvn/version "1.10.597"},
     org.clojure/spec.alpha {:mvn/version "0.2.176"},
-    thheller/shadow-cljs {:mvn/version "2.8.74"}}}},
+    thheller/shadow-cljs {:mvn/version "2.8.83"}}}},
  :paths ["src"]}
