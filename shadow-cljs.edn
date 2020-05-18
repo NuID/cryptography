@@ -1,12 +1,1 @@
-{:deps {:aliases [:cljs]}
- :builds
- {:browser
-  {:modules    {:nuid_cryptography {:entries [nuid.cryptography]}},
-   :output-dir "target/browser",
-   :asset-path "target/browser",
-   :target     :browser},
-
-  :node
-  {:output-to   "target/node/nuid_cryptography.js",
-   :exports-var nuid.cryptography/exports,
-   :target      :node-library}}}
+{:deps {:aliases [:cljs]}}
