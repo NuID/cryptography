@@ -25,13 +25,13 @@
 
 (defn default-parameters
   [& [params]]
-  (into lib/default-normalization-parameters params))
+  (into lib/default-string-normalization-parameters params))
 
 (defn digest
   ([input] (digest nil input))
   ([{::crypt.base64/keys        [salt]
      :string.normalization/keys [form]
-     :or                        {form lib/default-normalization-form}}
+     :or                        {form lib/default-string-normalization-form}}
     input]
    (let [salted     (str input salt)
          normalized (lib/normalize salted form)]

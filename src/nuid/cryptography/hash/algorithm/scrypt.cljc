@@ -43,7 +43,7 @@
        ::keys                     [N r p length]
        :as                        params
        :or                        {salt   (gen/generate (s/gen ::crypt.base64/salt))
-                                   form   lib/default-normalization-form
+                                   form   lib/default-string-normalization-form
                                    N      default-N
                                    r      default-r
                                    p      default-p
@@ -63,7 +63,7 @@
      :string.normalization/keys [form]
      ::keys                     [N r p length]
      :or                        {salt   (gen/generate (s/gen ::crypt.base64/salt))
-                                 form   lib/default-normalization-form
+                                 form   lib/default-string-normalization-form
                                  N      default-N
                                  r      default-r
                                  p      default-p

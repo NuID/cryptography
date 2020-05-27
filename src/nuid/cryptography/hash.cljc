@@ -13,10 +13,13 @@
         [clojure.test.check.generators]
         [clojure.spec.alpha :as s]])))
 
-(s/def ::algorithm
+(def algorithms
   #{::alg/sha256
     ::alg/sha512
     ::alg/scrypt})
+
+(s/def ::algorithm
+  algorithms)
 
 (s/def ::parameters
   (s/multi-spec

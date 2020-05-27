@@ -11,24 +11,27 @@
     [x]
     [x form]))
 
-(s/def :string.normalization/form
+(def string-normalization-forms
   #{:string.normalization/NFC
     :string.normalization/NFD
     :string.normalization/NFKC
     :string.normalization/NFKD})
 
-(def default-normalization-form
+(s/def :string.normalization/form
+  string-normalization-forms)
+
+(def default-string-normalization-form
   :string.normalization/NFKC)
 
-(def default-normalization-parameters
+(def default-string-normalization-parameters
   {:string.normalization/form
-   default-normalization-form})
+   default-string-normalization-form})
 
 #?(:clj
    (extend-protocol Normalizable
      java.lang.String
      (normalize
-       ([x] (normalize x default-normalization-form))
+       ([x] (normalize x default-string-normalization-form))
        ([x form]
         (let [form (case form
                      :string.normalization/NFC  Normalizer$Form/NFC
@@ -41,7 +44,7 @@
    (extend-protocol Normalizable
      string
      (normalize
-       ([x] (normalize x default-normalization-form))
+       ([x] (normalize x default-string-normalization-form))
        ([x form]
         (let [form (case form
                      :string.normalization/NFC  "NFC"
