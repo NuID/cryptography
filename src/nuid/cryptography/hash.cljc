@@ -1,9 +1,7 @@
 (ns nuid.cryptography.hash
   (:require
    [nuid.cryptography.hash.algorithm :as alg]
-   [nuid.cryptography.hash.algorithm.scrypt :as scrypt]
-   [nuid.cryptography.hash.algorithm.sha256 :as sha256]
-   [nuid.cryptography.hash.algorithm.sha512 :as sha512]
+   [nuid.cryptography.hash.impl]
    [nuid.cryptography.hash.proto :as proto]
    #?@(:clj
        [[clojure.alpha.spec.gen :as gen]
@@ -25,21 +23,6 @@
   (s/multi-spec
    alg/parameters-multi-spec
    ::algorithm))
-
-(def default-parameters alg/default-parameters)
-(def digest             alg/digest)
-(def parameters->fn     alg/parameters->fn)
-
-  ;; TODO: throw if no ::algorithm
-(defmethod alg/parameters->fn :default
-  [params]
-  (let [params (alg/default-parameters params)]
-    (with-meta
-      (fn [input]
-        (->>
-         (alg/digest params input)
-         (assoc params ::digest)))
-      params)))
 
 (s/def ::conformed-hashfn
   (s/and
@@ -69,19 +52,28 @@
        (s/gen ::parameters)
        (gen/fmap (partial s/conform ::parameters<>hashfn))))))
 
-(extend-protocol proto/Hashable
-  #?@(:clj  [java.lang.String]
-      :cljs [string])
-  (sha256
-    ([x]            (sha256/digest nil x))
-    ([x parameters] (sha256/digest parameters x)))
-  (sha512
-    ([x]            (sha512/digest nil x))
-    ([x parameters] (sha512/digest parameters x)))
-  (scrypt
-    ([x]            (scrypt/digest nil x))
-    ([x parameters] (scrypt/digest parameters x))))
+(def default-parameters alg/default-parameters)
+(def digest             alg/digest)
+(def parameters->fn     alg/parameters->fn)
 
-(def sha256 proto/sha256)
-(def sha512 proto/sha512)
-(def scrypt proto/scrypt)
+(defn sha256
+  ([x]            (proto/sha256 x))
+  ([x parameters] (proto/sha256 x parameters)))
+
+(defn sha512
+  ([x]            (proto/sha512 x))
+  ([x parameters] (proto/sha512 x parameters)))
+
+(defn scrypt
+  ([x]            (proto/scrypt x))
+  ([x parameters] (proto/scrypt x parameters)))
+
+(defmethod alg/parameters->fn :default
+  [params]
+  (let [params (alg/default-parameters params)]
+    (with-meta
+      (fn [input]
+        (->>
+         (alg/digest params input)
+         (assoc params ::digest)))
+      params)))
