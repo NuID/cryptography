@@ -11,13 +11,7 @@
         [clojure.test.check.generators]
         [clojure.spec.alpha :as s]])))
 
-(def algorithms
-  #{::alg/sha256
-    ::alg/sha512
-    ::alg/scrypt})
-
-(s/def ::algorithm
-  algorithms)
+(s/def ::algorithm alg/algorithms)
 
 (s/def ::parameters
   (s/multi-spec
