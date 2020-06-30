@@ -1,9 +1,8 @@
-(ns nuid.cryptography.hash.algorithm)
+(ns nuid.cryptography.hash.algorithm
+  (:require
+   [nuid.ident.cryptography :as ident.crypt]))
 
-(def algorithms
-  #{::sha256
-    ::sha512
-    ::scrypt})
+(def algorithms ident.crypt/hash-algorithms)
 
 (defmulti parameters-multi-spec :nuid.cryptography.hash/algorithm)
 (defmulti default-parameters    :nuid.cryptography.hash/algorithm)

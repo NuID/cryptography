@@ -1,5 +1,6 @@
 (ns nuid.cryptography.hash.lib
   (:require
+   [nuid.ident.cryptography :as ident.crypt]
    #?@(:clj  [[clojure.alpha.spec :as s]]
        :cljs [[clojure.spec.alpha :as s]]))
   #?@(:clj
@@ -12,10 +13,7 @@
     [x form]))
 
 (def string-normalization-forms
-  #{:string.normalization/NFC
-    :string.normalization/NFD
-    :string.normalization/NFKC
-    :string.normalization/NFKD})
+  ident.crypt/string-normalization-forms)
 
 (s/def :string.normalization/form
   string-normalization-forms)
