@@ -4,11 +4,7 @@
 
 Cross-platform cryptographic facilities.
 
-## ⚠️  This library has not been independently audited.
-
-`nuid.cryptography` primarily exists to abstract over platform-specific differences and provide a common interface to the provided functionality across host platforms. `nuid.cryptography` delegates directly to host implementions (e.g. `SecureRandom`, `MessageDigest`, etc. on the `jvm`, and `brorand`, `hash.js`, etc., in `node` and the browser).
-
-## Git issues and other communications are warmly welcomed. [dev@nuid.io](mailto:dev@nuid.io)
+Git issues and other communications are warmly welcomed. [dev@nuid.io](mailto:dev@nuid.io)
 
 ## Requirements
 
@@ -20,6 +16,20 @@ Cross-platform cryptographic facilities.
 
 `{nuid/cryptography {:git/url "https://github.com/nuid/cryptography" :sha "..."}}`
 
+## Notes
+
+`nuid.cryptography` primarily exists to abstract over platform-specific
+differences and provide a common interface to the provided functionality across
+host platforms. `nuid.cryptography` delegates directly to host implementions
+(e.g. `SecureRandom`, `MessageDigest`, etc. on the `jvm`, and `brorand`,
+`hash.js`, etc., in `node` and the browser).
+
 ## Licensing
 
 Apache v2.0 or MIT
+
+## ⚠️  Disclaimer
+
+This library is [property tested](https://github.com/clojure/test.check#testcheck)
+to help verify implementation, but has not yet been audited by an independent
+third party.
