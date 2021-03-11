@@ -1,18 +1,15 @@
 (ns nuid.cryptography.hash.algorithm.scrypt
   (:refer-clojure :exclude [bytes])
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as gen]
+   [clojure.test.check.generators]
    [nuid.bytes :as bytes]
    [nuid.cryptography.base64 :as crypt.base64]
    [nuid.cryptography.hash.algorithm :as alg]
    [nuid.cryptography.hash.lib :as lib]
-   #?@(:clj
-       [[clojure.alpha.spec.gen :as gen]
-        [clojure.alpha.spec :as s]]
-       :cljs
-       [[clojure.spec.gen.alpha :as gen]
-        [clojure.test.check.generators]
-        [clojure.spec.alpha :as s]
-        ["scryptsy" :as scryptjs]]))
+   #?@(:cljs
+       [["scryptsy" :as scryptjs]]))
   #?@(:clj
       [(:import
         (org.bouncycastle.crypto.generators SCrypt))]))

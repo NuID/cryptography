@@ -1,17 +1,13 @@
 (ns nuid.cryptography.hash.bn
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as gen]
+   [clojure.test.check.generators]
    [nuid.bn :as bn]
    [nuid.cryptography.base64 :as crypt.base64]
    [nuid.cryptography.hash :as hash]
    [nuid.cryptography.hash.algorithm :as alg]
-   [nuid.cryptography.hash.algorithm.scrypt :as scrypt]
-   #?@(:clj
-       [[clojure.alpha.spec.gen :as gen]
-        [clojure.alpha.spec :as s]]
-       :cljs
-       [[clojure.spec.gen.alpha :as gen]
-        [clojure.test.check.generators]
-        [clojure.spec.alpha :as s]])))
+   [nuid.cryptography.hash.algorithm.scrypt :as scrypt]))
 
 (s/def ::conformed-hashfn
   (s/and

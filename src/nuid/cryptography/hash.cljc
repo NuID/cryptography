@@ -1,15 +1,11 @@
 (ns nuid.cryptography.hash
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as gen]
+   [clojure.test.check.generators]
    [nuid.cryptography.hash.algorithm :as alg]
    [nuid.cryptography.hash.impl]
-   [nuid.cryptography.hash.proto :as proto]
-   #?@(:clj
-       [[clojure.alpha.spec.gen :as gen]
-        [clojure.alpha.spec :as s]]
-       :cljs
-       [[clojure.spec.gen.alpha :as gen]
-        [clojure.test.check.generators]
-        [clojure.spec.alpha :as s]])))
+   [nuid.cryptography.hash.proto :as proto]))
 
 (s/def ::algorithm alg/algorithms)
 

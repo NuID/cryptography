@@ -1,8 +1,7 @@
 (ns nuid.cryptography.hash.lib
   (:require
-   [nuid.ident.cryptography :as ident.crypt]
-   #?@(:clj  [[clojure.alpha.spec :as s]]
-       :cljs [[clojure.spec.alpha :as s]]))
+   [clojure.spec.alpha :as s]
+   [nuid.ident.cryptography :as ident.crypt])
   #?@(:clj
       [(:import
         (java.text Normalizer Normalizer$Form))]))

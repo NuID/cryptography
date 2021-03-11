@@ -1,15 +1,12 @@
 (ns nuid.cryptography
   (:refer-clojure :exclude [bytes])
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as gen]
+   [clojure.test.check.generators]
    [nuid.bytes :as bytes]
-   #?@(:clj
-       [[clojure.alpha.spec.gen :as gen]
-        [clojure.alpha.spec :as s]]
-       :cljs
-       [[clojure.spec.gen.alpha :as gen]
-        [clojure.test.check.generators]
-        [clojure.spec.alpha :as s]
-        ["brorand" :as secure-random]]))
+   #?@(:cljs
+       [["brorand" :as secure-random]]))
   #?@(:clj
       [(:import
         (java.security SecureRandom))]))

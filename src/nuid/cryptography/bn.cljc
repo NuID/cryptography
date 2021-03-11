@@ -1,14 +1,10 @@
 (ns nuid.cryptography.bn
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as gen]
+   [clojure.test.check.generators]
    [nuid.bn :as bn]
-   [nuid.cryptography :as crypt]
-   #?@(:clj
-       [[clojure.alpha.spec.gen :as gen]
-        [clojure.alpha.spec :as s]]
-       :cljs
-       [[clojure.spec.gen.alpha :as gen]
-        [clojure.test.check.generators]
-        [clojure.spec.alpha :as s]])))
+   [nuid.cryptography :as crypt]))
 
 (defn secure-random-generator
   [num-bytes]

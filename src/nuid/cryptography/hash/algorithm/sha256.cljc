@@ -1,13 +1,12 @@
 (ns nuid.cryptography.hash.algorithm.sha256
   (:refer-clojure :exclude [bytes])
   (:require
+   [clojure.spec.alpha :as s]
    [nuid.bytes :as bytes]
    [nuid.cryptography.base64 :as crypt.base64]
    [nuid.cryptography.hash.algorithm :as alg]
    [nuid.cryptography.hash.lib :as lib]
-   #?@(:clj  [[clojure.alpha.spec :as s]]
-       :cljs [[clojure.spec.alpha :as s]
-              ["hash.js" :as h]]))
+   #?@(:cljs [["hash.js" :as h]]))
   #?@(:clj
       [(:import
         (java.security MessageDigest))]))
