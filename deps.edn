@@ -3,20 +3,20 @@
   org.clojure/clojure {:mvn/version "1.10.1"},
   nuid/base64
   {:git/url "https://github.com/nuid/base64.git",
-   :sha "a381b5f63263e3e85f0d124fc15a8bd1651ea7fd"},
+   :sha "1973314afc3710a045d617830a8fa64d86cecb11"},
   nuid/bytes
   {:git/url "https://github.com/nuid/bytes.git",
-   :sha "c6022e343afb77d992934212dd178b12a0145bf1"},
+   :sha "3c3e37b94bb9161cc55986e3f5c22030c7f6f435"},
   nuid/bn
   {:git/url "https://github.com/nuid/bn.git",
-   :sha "56019bc07d9cf15bf69982b8093212e290c677ca"},
+   :sha "30036cd9bf7654fef3987b57887878b1d8f8f76b"},
   org.clojure/test.check {:mvn/version "1.0.0"},
   nuid/ident
   {:git/url "https://github.com/nuid/ident.git",
    :sha "f4b9ef164b175f515f032aa194a17727d71eedb4"},
   nuid/lib
   {:git/url "https://github.com/nuid/lib.git",
-   :sha "b5c0ecdc6352f43087827702648df5e9598c86bb"}},
+   :sha "93fec185a33d5abc59d8ec234ed57abe3b3d61f5"}},
  :aliases
  {:cljs {:extra-deps {thheller/shadow-cljs {:mvn/version "2.11.23"}}}},
  :paths ["src"]}
