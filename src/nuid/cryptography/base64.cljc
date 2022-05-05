@@ -6,6 +6,12 @@
    [nuid.base64 :as base64]
    [nuid.cryptography :as crypt]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
+
 (defn secure-random-generator
   [num-bytes]
   (->>

@@ -6,6 +6,11 @@
    [nuid.bn :as bn]
    [nuid.cryptography :as crypt]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
 (defn secure-random-generator
   [num-bytes]
   (->>
@@ -22,7 +27,17 @@
   (let [g (secure-random-generator num-bytes)]
     (gen/such-that (fn [n] (bn/lt? n lt)) g 500)))
 
+
+   ;;;
+   ;;; NOTE: api
+   ;;;
+
+
 (defn generate-secure-random-lt
   [num-bytes lt]
   (gen/generate
    (secure-random-lt-generator num-bytes lt)))
+
+(defn generate-nonce []
+  (->> (gen/generate (s/gen ::nonce))
+       (s/unform ::nonce)))

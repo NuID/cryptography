@@ -5,6 +5,12 @@
    [nuid.cryptography.hash.algorithm.sha512 :as sha512]
    [nuid.cryptography.hash.proto :as proto]))
 
+
+   ;;;
+   ;;; NOTE: clj; extend hash algoritms to platform `string`
+   ;;;
+
+
 (extend-protocol proto/Hashable
   java.lang.String
   (sha256

@@ -11,6 +11,12 @@
       [(:import
         (java.security MessageDigest))]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
+
 (s/def ::parameters
   (s/keys
    :req [:string.normalization/form]
@@ -22,9 +28,20 @@
    [::crypt.base64/salt
     :string.normalization/form]))
 
+
+   ;;;
+   ;;; NOTE: helper functions, internal logic
+   ;;;
+
+
 (defn default-parameters
   [& [params]]
   (into lib/default-string-normalization-parameters params))
+
+
+   ;;;
+   ;;; NOTE: api
+   ;;;
 
 (defn digest
   ([input] (digest nil input))
@@ -37,9 +54,21 @@
      #?(:clj  (.digest (MessageDigest/getInstance "SHA-256") (bytes/from normalized))
         :cljs (bytes/from (.digest (.update (h/sha256) normalized)))))))
 
-(defmethod alg/parameters-multi-spec ::alg/sha256 [_]      ::parameters)
-(defmethod alg/default-parameters    ::alg/sha256 [params] (default-parameters params))
-(defmethod alg/digest                ::alg/sha256
+
+   ;;;
+   ;;; NOTE: interface implementations
+   ;;;
+
+
+(defmethod alg/parameters-multi-spec ::alg/sha256
+  [_]
+  ::parameters)
+
+(defmethod alg/default-parameters ::alg/sha256
+  [params]
+  (default-parameters params))
+
+(defmethod alg/digest ::alg/sha256
   ([{:nuid.cryptography.hash/keys [input] :as params}]
    (digest params input))
   ([params input]

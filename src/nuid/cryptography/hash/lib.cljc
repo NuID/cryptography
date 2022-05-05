@@ -6,10 +6,20 @@
       [(:import
         (java.text Normalizer Normalizer$Form))]))
 
+
+   ;;;
+   ;;; NOTE: protocols
+
 (defprotocol Normalizable
   (normalize
     [x]
     [x form]))
+
+
+   ;;;
+   ;;; NOTE: static data, defaults, config
+   ;;;
+
 
 (def string-normalization-forms
   ident.crypt/string-normalization-forms)
@@ -23,6 +33,12 @@
 (def default-string-normalization-parameters
   {:string.normalization/form
    default-string-normalization-form})
+
+
+   ;;;
+   ;;; NOTE: api; add `normalize` to platform `string`
+   ;;;
+
 
 #?(:clj
    (extend-protocol Normalizable

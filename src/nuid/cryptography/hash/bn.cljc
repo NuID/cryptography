@@ -9,11 +9,19 @@
    [nuid.cryptography.hash.algorithm :as alg]
    [nuid.cryptography.hash.algorithm.scrypt :as scrypt]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
+
 (s/def ::conformed-hashfn
   (s/and
    ::hash/conformed-hashfn
    (fn [f] (::conformed? (meta f)))))
 
+;; NOTE: used for converting a data representation to a hash function,
+;;       and the reverse operation
 (s/def ::parameters<>hashfn
   (s/conformer
    (fn [x]

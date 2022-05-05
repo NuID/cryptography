@@ -2,6 +2,12 @@
   (:require
    [nuid.ident.cryptography :as ident.crypt]))
 
+
+   ;;;
+   ;;; NOTE: interface for hash algoritms
+   ;;;
+
+
 (def algorithms ident.crypt/hash-algorithms)
 
 (defmulti parameters-multi-spec :nuid.cryptography.hash/algorithm)

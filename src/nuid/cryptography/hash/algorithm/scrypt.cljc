@@ -14,6 +14,12 @@
       [(:import
         (org.bouncycastle.crypto.generators SCrypt))]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
+
 (s/def ::N #{1024 2048 4096 8192 16384 32768 65536})
 (s/def ::r #{8 16 24 32})
 (s/def ::p #{1 2})
@@ -29,10 +35,22 @@
     ::p
     ::length]))
 
+
+   ;;;
+   ;;; NOTE: static data, defaults, config
+   ;;;
+
+
 (def default-N 16384)
 (def default-r 8)
 (def default-p 1)
 (def default-length 32)
+
+
+   ;;;
+   ;;; NOTE: helper functions, internal logic
+   ;;;
+
 
 (defn default-parameters
   [& [{::crypt.base64/keys        [salt]
@@ -54,6 +72,12 @@
     ::length                   length}
    (into (or params {}))))
 
+
+   ;;;
+   ;;; NOTE: api
+   ;;;
+
+
 (defn digest
   ([input] (digest nil input))
   ([{::crypt.base64/keys        [salt]
@@ -70,9 +94,21 @@
      #?(:clj  (SCrypt/generate bs (bytes/from salt) N r p length)
         :cljs (scryptjs bs salt N r p length)))))
 
-(defmethod alg/parameters-multi-spec ::alg/scrypt [_]      ::parameters)
-(defmethod alg/default-parameters    ::alg/scrypt [params] (default-parameters params))
-(defmethod alg/digest                ::alg/scrypt
+
+   ;;;
+   ;;; NOTE: interface implementations
+   ;;;
+
+
+(defmethod alg/parameters-multi-spec ::alg/scrypt
+  [_]
+  ::parameters)
+
+(defmethod alg/default-parameters ::alg/scrypt
+  [params]
+  (default-parameters params))
+
+(defmethod alg/digest ::alg/scrypt
   ([{:nuid.cryptography.hash/keys [input] :as params}]
    (digest params input))
   ([params input]

@@ -11,6 +11,12 @@
       [(:import
         (java.security SecureRandom))]))
 
+
+   ;;;
+   ;;; NOTE: CSPRNG
+   ;;;
+
+
 (def secure-random-bytes
   #?(:clj  (let [secure-random (SecureRandom.)]
              (fn [num-bytes]
@@ -18,6 +24,12 @@
                  (.nextBytes secure-random bs)
                 bs)))
      :cljs (comp bytes/from secure-random)))
+
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
 
 (s/def ::secure-random-bytes
   (s/with-gen

@@ -7,6 +7,12 @@
    [nuid.cryptography.hash.impl]
    [nuid.cryptography.hash.proto :as proto]))
 
+
+   ;;;
+   ;;; NOTE: specs, generators
+   ;;;
+
+
 (s/def ::algorithm alg/algorithms)
 
 (s/def ::parameters
@@ -42,9 +48,21 @@
        (s/gen ::parameters)
        (gen/fmap (partial s/conform ::parameters<>hashfn))))))
 
+
+   ;;;
+   ;;; NOTE: defaults, config
+   ;;;
+
+
 (def default-parameters alg/default-parameters)
 (def digest             alg/digest)
 (def parameters->fn     alg/parameters->fn)
+
+
+   ;;;
+   ;;; NOTE: api
+   ;;;
+
 
 (defn sha256
   ([x]            (proto/sha256 x))
@@ -57,6 +75,12 @@
 (defn scrypt
   ([x]            (proto/scrypt x))
   ([x parameters] (proto/scrypt x parameters)))
+
+
+   ;;;
+   ;;; NOTE: default multimethod implementation
+   ;;;
+
 
 (defmethod alg/parameters->fn :default
   [params]
